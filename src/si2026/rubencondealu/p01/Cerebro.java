@@ -5,7 +5,10 @@ import core.game.StateObservation;
 import ontology.Types;
 import tools.Vector2d;
 
+import javax.swing.*;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Cerebro {
 
@@ -29,10 +32,23 @@ public class Cerebro {
     public double limitexmax;
     public double limiteymax;
 
+    public int ranngoBala;
 
-    public Cerebro() {}
+    public HashMap<Integer,Vector2d> peligro;
+
+    private StateObservation stateObservation;
+
+    public ArrayList<Integer> direccionPeligro;
+
+
+    public Cerebro() {
+        ranngoBala = 4;
+    }
 
     public void analizarMundo(StateObservation stateObs) {
+        stateObservation = stateObs;
+        peligro = new HashMap<>();
+        direccionPeligro = new ArrayList<>();
         blockSize = stateObs.getBlockSize();
         limitexmin = Double.MAX_VALUE;
         limiteymin = Double.MAX_VALUE;
@@ -83,10 +99,51 @@ public class Cerebro {
             }
         }
 
+        for(Vector2d p : proyectiles){
+            if(p.y == avatar.y && p.x < avatar.x && p.dist(avatar) <= ranngoBala){
+                peligro.put(0, p);
+                direccionPeligro.add(0);
+            }
+            if(p.x == avatar.x && p.y < avatar.y && p.dist(avatar) <= ranngoBala){
+                peligro.put(1, p);
+                direccionPeligro.add(1);
+            }if(p.y == avatar.y && p.x > avatar.x && p.dist(avatar) <= ranngoBala){
+                peligro.put(2, p);
+                direccionPeligro.add(2);
+            }if(p.x == avatar.x && p.y > avatar.y && p.dist(avatar) <= ranngoBala){
+                peligro.put(3, p);
+                direccionPeligro.add(3);
+            }
+        }
+
 
 
 
     }
+
+
+    public boolean mataSiDispara(){
+        StateObservation futuro = getStateObservation();
+        double ScoreAct = stateObservation.getGameScore();
+
+
+        futuro.advance(Types.ACTIONS.ACTION_USE);
+        for(int i = 0; i < 10; i++){
+            futuro.advance(Types.ACTIONS.ACTION_NIL);
+        }
+        return futuro.getGameScore() > ScoreAct;
+    }
+
+    public boolean siMeMuevoMuero(Types.ACTIONS action){
+        StateObservation futuro = getStateObservation();
+        futuro.advance(action);
+
+        for(int i = 0; i < 5; i++){
+            futuro.advance(Types.ACTIONS.ACTION_NIL);
+        }
+        return futuro.isGameOver();
+    }
+
 
     public boolean puedoMoverme(Types.ACTIONS accion){
         Vector2d posicion = new Vector2d(avatar.x, avatar.y);
@@ -108,6 +165,10 @@ public class Cerebro {
             return false;
         }
         return true;
+    }
+
+    public StateObservation getStateObservation(){
+        return stateObservation.copy();
     }
 
 }

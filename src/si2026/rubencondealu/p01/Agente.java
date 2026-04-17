@@ -61,9 +61,8 @@ public class Agente extends AbstractPlayer {
         // TODO Esbozo de método generado automáticamente
 
         cerebro.analizarMundo(stateObs);
-        ACTIONS acc = motor.disparo();
-        System.out.println(acc);
-        return acc;
+        System.out.println(cerebro.orientacion);
+        return ACTIONS.ACTION_LEFT;
 
     }
 
