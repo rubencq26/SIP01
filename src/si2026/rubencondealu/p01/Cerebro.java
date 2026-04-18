@@ -40,6 +40,9 @@ public class Cerebro {
 
     public ArrayList<Integer> direccionPeligro;
 
+    public Types.ACTIONS action;
+
+    public Vector2d enemigoCercano;
 
     public Cerebro() {
         ranngoBala = 4;
@@ -58,10 +61,16 @@ public class Cerebro {
         ArrayList<Observation>[] npc = stateObs.getNPCPositions();
         balaPropia = false;
         enemigos = new ArrayList<>();
+        double distancia = Double.MAX_VALUE;
+
         for(ArrayList<Observation> obs : npc){
             for(Observation o : obs){
 
                 enemigos.add(new Vector2d(Math.floor(o.position.x/blockSize), Math.floor(o.position.y/blockSize)));
+                if(enemigos.get(enemigos.size()-1).dist(avatar) < distancia){
+                    distancia = enemigos.get(enemigos.size()-1).dist(avatar);
+                    enemigoCercano = enemigos.get(enemigos.size()-1);
+                }
 
             }
         }
@@ -116,10 +125,11 @@ public class Cerebro {
             }
         }
 
-
-
-
+        Astar astar = new Astar(this);
+        action = astar.getAccion();
     }
+
+
 
 
     public boolean mataSiDispara(){
@@ -134,8 +144,23 @@ public class Cerebro {
         return futuro.getGameScore() > ScoreAct;
     }
 
+    public boolean mataSiDispara(Types.ACTIONS action){
+        StateObservation futuro = getStateObservation();
+        double ScoreAct = stateObservation.getGameScore();
+
+        futuro.advance(action);
+        futuro.advance(Types.ACTIONS.ACTION_USE);
+        for(int i = 0; i < 10; i++){
+            futuro.advance(Types.ACTIONS.ACTION_NIL);
+        }
+        return futuro.getGameScore() > ScoreAct;
+    }
+
     public boolean siMeMuevoMuero(Types.ACTIONS action){
         StateObservation futuro = getStateObservation();
+
+        if()
+
         futuro.advance(action);
 
         for(int i = 0; i < 5; i++){

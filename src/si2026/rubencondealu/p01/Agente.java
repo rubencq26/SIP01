@@ -31,26 +31,56 @@ public class Agente extends AbstractPlayer {
     public Agente(StateObservation stateObs, ElapsedCpuTimer elapsedTimer) {
         // TODO Esbozo de constructor generado automáticamente
         this.cerebro = new Cerebro();
-        Condicion c1 = new CondicionPeligro();
+
+        Condicion miraIzquierda = new ListaCondiciones.MiroIzquierda();
+        Condicion miraArriba = new ListaCondiciones.MiroArriba();
+        Condicion miraAbajo = new ListaCondiciones.MiroAbajo();
+        Condicion miraDerecha = new ListaCondiciones.MiroDerecha();
+
+        Condicion peligroIzquierda = new ListaCondiciones.PeligroIzquierda();
+        Condicion peligroArriba = new ListaCondiciones.PeligroArriba();
+        Condicion peligroAbajo = new ListaCondiciones.PeligroAbajo();
+        Condicion peligroDerecha = new ListaCondiciones.PeligroDerecha();
+
+        Condicion siDisparaMata = new ListaCondiciones.SiDisparaMata();
+        Condicion siArribaMata = new ListaCondiciones.SiDisparaArrMata();
+        Condicion siIzquierdaMata = new ListaCondiciones.SiDisparaIzqMata();
+        Condicion siDerechaMata = new ListaCondiciones.SiDisparaDerMata();
+        Condicion siAbajoMata = new ListaCondiciones.SiDisparaAbjMata();
+
+        Condicion siIzquierdaMuero = new ListaCondiciones.SiMeMuevoIzqMuero();
+        Condicion siArribaMuero = new ListaCondiciones.SiMeMuevoArrMuero();
+        Condicion siDerechaMuero = new ListaCondiciones.SiMeMuevoDerMuero();
+        Condicion siAbajoMuero = new ListaCondiciones.SiMeMuevoAbjMuero();
+
+        Condicion siIzquierdaVivo = new ListaCondiciones.SiMeMuevoIzqVivo();
+        Condicion siArribaVivo = new ListaCondiciones.SiMeMuevoArrVivo();
+        Condicion siDerechaVivo = new ListaCondiciones.SiMeMuevoDerVivo();
+        Condicion siAbajoVivo = new ListaCondiciones.SiMeMuevoAbjVivo();
+
+        Condicion sigMovIzquierda = new ListaCondiciones.AstarIzquierda();
+        Condicion sigMovArriba = new ListaCondiciones.AstarArriba();
+        Condicion sigMovDerecha = new ListaCondiciones.AstarDerecha();
+        Condicion sigMovAbajo = new ListaCondiciones.AstarAbajo();
+        Condicion sigMovUse = new ListaCondiciones.AstarUse();
+
         List<Condicion> condiciones = new ArrayList<>();
-        condiciones.add(c1);
+        condiciones.add(peligroIzquierda);
+        condiciones.add(siArribaVivo);
+        Regla r1 = new Regla(condiciones, ACTIONS.ACTION_UP);
 
+        condiciones = new ArrayList<>();
+        condiciones.add(peligroIzquierda);
+        condiciones.add(siAbajoVivo);
+        Regla r2 = new Regla(condiciones, ACTIONS.ACTION_DOWN);
 
-        Condicion c2 = new CondicionDisparo();
+        condiciones = new ArrayList<>();
+        condiciones.add(peligroIzquierda);
+        Regla r3 = new Regla(condiciones, ACTIONS.ACTION_RIGHT);
 
-        condiciones.add(c2);
-
-        Condicion c3 = new CondicionDisparoObstaculizado();
-
-        condiciones.add(c3);
-
-
-
-
-
-
-        motor = new MotorReglas(condiciones, cerebro);
-
+        condiciones = new ArrayList<>();
+        condiciones.add(peligroArriba);
+        condiciones.add(siDerechaMuero);
 
 
 
