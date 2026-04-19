@@ -29,11 +29,12 @@ public class Nodo {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Nodo nodo = (Nodo) o;
-        return Objects.equals(posicion, nodo.posicion);
+        return (int)posicion.x == (int)nodo.posicion.x &&
+                (int)posicion.y == (int)nodo.posicion.y;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(posicion);
+        return Objects.hash((int)posicion.x, (int)posicion.y);
     }
 }

@@ -152,29 +152,11 @@ public class Cerebro {
         }
 
 
-        Vector2d metaAstar = null;
-        if(enemigoCercano != null){
-            metaAstar = new Vector2d(enemigoCercano.x, enemigoCercano.y);
+        normalizarEnemigoCercano();
 
 
-            if (Math.abs(avatar.x - enemigoCercano.x) > Math.abs(avatar.y - enemigoCercano.y)) {
-                double offset = (avatar.x > enemigoCercano.x) ? 2 : -2;
-                metaAstar.x += offset;
-            } else {
 
-                double offset = (avatar.y > enemigoCercano.y) ? 2 : -2;
-                metaAstar.y += offset;
-            }
-
-
-            if(metaAstar.x < limitexmin) metaAstar.x = limitexmin + 1;
-            if(metaAstar.x > limitexmax) metaAstar.x = limitexmax - 1;
-            if(metaAstar.y < limiteymin) metaAstar.y = limiteymin + 1;
-            if(metaAstar.y > limiteymax) metaAstar.y = limiteymax - 1;
-        }
-
-
-        Astar astar = new Astar(this, metaAstar);
+        Astar astar = new Astar(this);
         action = astar.getAccion();
     }
 
@@ -323,39 +305,76 @@ public class Cerebro {
         return futuro.isGameOver();
     }
 
+    public void normalizarEnemigoCercano(){
+        if(enemigoCercano != null){
+            if(avatar.x >= enemigoCercano.x && enemigoCercano.y < avatar.y){
+                if(enemigoCercano.x - 2 > limitexmin){
+                    enemigoCercano.x -= 2;
+                    enemigoCercano.y += 1;
+                }else{
+                    enemigoCercano.x = limitexmin + 1;
+                    enemigoCercano.y += 2;
+                }
+            }else if(enemigoCercano.x > avatar.x && enemigoCercano.y < avatar.y){
+                if(Math.abs(enemigoCercano.x - avatar.x) > 2){
+                    enemigoCercano.y += 1;
+                }else{
+                    enemigoCercano.x = avatar.x;
+                    enemigoCercano.y += 1;
+                }
+            }else if(enemigoCercano.y >= avatar.y && enemigoCercano.x < avatar.x){
+                if(enemigoCercano.y + 2 < limiteymax){
+                    enemigoCercano.x += 1;
+                    enemigoCercano.y += 2;
+                }else{
+                    enemigoCercano.x += 1;
+                    enemigoCercano.y = limiteymax - 1;
+                }
+            }else if(enemigoCercano.y < avatar.y && enemigoCercano.x < avatar.x){
+                if(Math.abs(enemigoCercano.y - avatar.y) > 2){
+                    enemigoCercano.x += 1;
+                }else{
+                    enemigoCercano.x += 1;
+                    enemigoCercano.y = avatar.y;
+                }
 
-
-
-    public boolean puedoMoverme(Types.ACTIONS accion) {
-        Vector2d posicion = new Vector2d(avatar.x, avatar.y);
-        switch (accion) {
-            case ACTION_UP:
-                posicion.y -= 1;
-                break;
-            case ACTION_DOWN:
-                posicion.y += 1;
-                break;
-            case ACTION_LEFT:
-                posicion.x -= 1;
-                break;
-            case ACTION_RIGHT:
-                posicion.x += 1;
-                break;
-            default:
-                return true;
-        }
-
-        for (Vector2d obst : obstaculos) {
-            if (posicion.dist(obst) <= 0.1) {
-                return false;
+            }else if(enemigoCercano.x >= avatar.x && enemigoCercano.y > avatar.y){
+                if(enemigoCercano.x + 2 < limitexmax){
+                    enemigoCercano.x += 2;
+                    enemigoCercano.y -= 1;
+                }else{
+                    enemigoCercano.x = limitexmax - 1;
+                    enemigoCercano.y -= 1;
+                }
+            } else if (enemigoCercano.x < avatar.x && enemigoCercano.y > avatar.y) {
+                if(Math.abs(enemigoCercano.x - avatar.x) > 2){
+                    enemigoCercano.y -= 1;
+                }else{
+                    enemigoCercano.x = avatar.x;
+                    enemigoCercano.y -= 1;
+                }
+            }else if(enemigoCercano.y <= avatar.y && enemigoCercano.x > avatar.x){
+                if(enemigoCercano.y - 2 > limiteymin){
+                    enemigoCercano.x -= 1;
+                    enemigoCercano.y -= 2;
+                }else{
+                    enemigoCercano.x -= 1;
+                    enemigoCercano.y = limiteymin + 1;
+                }
+            }else{
+                if(Math.abs(enemigoCercano.y - avatar.y) > 2){
+                    enemigoCercano.x -= 1;
+                }else{
+                    enemigoCercano.x -= 1;
+                    enemigoCercano.y = avatar.y;
+                }
             }
         }
-
-        if (posicion.x <= limitexmin || posicion.x >= limitexmax || posicion.y <= limiteymin || posicion.y >= limiteymax) {
-            return false;
-        }
-        return true;
     }
+
+
+
+
 
     public StateObservation getStateObservation() {
         return stateObservation.copy();

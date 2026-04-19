@@ -29,7 +29,7 @@ public class MotorReglas {
 
         }
 
-        return new Regla(new ArrayList<Condicion>() , Types.ACTIONS.ACTION_USE);
+        return new Regla(new ArrayList<Condicion>() , Types.ACTIONS.ACTION_NIL);
 
     }
 

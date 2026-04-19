@@ -257,7 +257,7 @@ public class Agente extends AbstractPlayer {
 
         cerebro.analizarMundo(stateObs, elapsedTimer);
         Regla r = motor.disparo();
-        //System.out.println(r.toString());
+        //System.out.println(cerebro.limiteymax);
         return r.action;
 
     }
