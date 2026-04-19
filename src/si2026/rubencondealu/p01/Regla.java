@@ -39,6 +39,18 @@ public class Regla {
         return seCumple;
     }
 
+    @Override
+    public String toString() {
+        String msg = "Regla = { ";
+
+        for (Condicion condicion : antecedentes) {
+            msg += condicion.getClass().getSimpleName() + " ";
+        }
+        msg += action + " ";
+
+        msg += "}";
+        return msg;
+    }
 
 
 }

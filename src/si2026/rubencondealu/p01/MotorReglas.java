@@ -18,13 +18,18 @@ public class MotorReglas {
     public Regla disparo() {
 
         for (Regla r : reglas) {
-            if (r.seCumple(cerebro)) {
-                return r;
+            boolean seCumple = true;
+            for (Condicion c : r.antecedentes) {
+                if (!c.seCumple(cerebro)) {
+                    seCumple = false;
+                    break;
+                }
             }
+            if (seCumple) return r;
 
         }
 
-        return null;
+        return new Regla(new ArrayList<Condicion>() , Types.ACTIONS.ACTION_USE);
 
     }
 
