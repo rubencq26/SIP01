@@ -145,10 +145,7 @@ public class ListaCondiciones {
     }
 
 
-    public static class ArmaRecargada implements Condicion{
-        @Override
-        public boolean seCumple(Cerebro cerebro) {return cerebro.cooldown < 1;}
-    }
+
 
 
     public static class SiDisparaMata implements Condicion {

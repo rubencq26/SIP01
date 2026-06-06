@@ -23,14 +23,22 @@ public class Agente extends AbstractPlayer {
     // obstaculos getImmovablePositions itype = 3
     // zona de bandidos getInmovablePosition itype = 4
 
-    Cerebro cerebro;
-    MotorReglas motor;
     /**
      *
      */
     public Agente(StateObservation stateObs, ElapsedCpuTimer elapsedTimer) {
         // TODO Esbozo de constructor generado automáticamente
-        this.cerebro = new Cerebro();
+
+
+    }
+
+    @Override
+    public ACTIONS act(StateObservation stateObs, ElapsedCpuTimer elapsedTimer) {
+        // TODO Esbozo de método generado automáticamente
+
+
+
+        Cerebro cerebro = new Cerebro();
         ArrayList<Regla> reglas = new ArrayList<>();
 
         Condicion miraIzquierda = new ListaCondiciones.MiroIzquierda();
@@ -48,7 +56,7 @@ public class Agente extends AbstractPlayer {
         Condicion peligroAbajo = new ListaCondiciones.PeligroAbajo();
         Condicion peligroDerecha = new ListaCondiciones.PeligroDerecha();
 
-        Condicion armaRecargada = new ListaCondiciones.ArmaRecargada();
+
 
         Condicion siDisparaMata = new ListaCondiciones.SiDisparaMata();
         Condicion siArribaMata = new ListaCondiciones.SiDisparaArrMata();
@@ -150,7 +158,6 @@ public class Agente extends AbstractPlayer {
         reglas.add(r12);
 
         condiciones = new ArrayList<>();
-        condiciones.add(armaRecargada);
         condiciones.add(siDisparaMata);
         Regla r13 = new Regla(condiciones, ACTIONS.ACTION_USE);
         reglas.add(r13);
@@ -182,7 +189,6 @@ public class Agente extends AbstractPlayer {
 
         condiciones = new ArrayList<>();
         condiciones.add(conTiempo);
-        condiciones.add(armaRecargada);
         condiciones.add(siRompeMuroMata);
         Regla r23 = new Regla(condiciones, ACTIONS.ACTION_USE);
         reglas.add(r23);
@@ -190,21 +196,18 @@ public class Agente extends AbstractPlayer {
 
         condiciones = new ArrayList<>();
         condiciones.add(conTiempo);
-        condiciones.add(armaRecargada);
         condiciones.add(siRompeMuroIzquierdaMata);
         Regla r24 = new Regla(condiciones, ACTIONS.ACTION_LEFT);
         reglas.add(r24);
 
         condiciones = new ArrayList<>();
         condiciones.add(conTiempo);
-        condiciones.add(armaRecargada);
         condiciones.add(siRompeMuroArribaMata);
         Regla r25 = new Regla(condiciones, ACTIONS.ACTION_UP);
         reglas.add(r25);
 
         condiciones = new ArrayList<>();
         condiciones.add(conTiempo);
-        condiciones.add(armaRecargada);
         condiciones.add(siRompeMuroDerechaMata);
         Regla r26 = new Regla(condiciones, ACTIONS.ACTION_RIGHT);
         reglas.add(r26);
@@ -247,13 +250,7 @@ public class Agente extends AbstractPlayer {
 
 
 
-        motor = new MotorReglas(reglas, cerebro);
-
-    }
-
-    @Override
-    public ACTIONS act(StateObservation stateObs, ElapsedCpuTimer elapsedTimer) {
-        // TODO Esbozo de método generado automáticamente
+        MotorReglas motor = new MotorReglas(reglas, cerebro);
 
         cerebro.analizarMundo(stateObs, elapsedTimer);
         Regla r = motor.disparo();
